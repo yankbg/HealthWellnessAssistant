@@ -10,19 +10,21 @@ import java.sql.Date;
 public class JournalEntry {
 
     @PrimaryKey(autoGenerate = true)
-    private int journal_id;
+    private long journal_id;
 
     String text_context;
-    Date date;
+    long date;
     String ai_sentiment;
+    float ai_confidence;
 
     public JournalEntry() {
     }
 
-    public JournalEntry(String text_context, Date date, String ai_sentiment) {
+    public JournalEntry(String text_context, long date, String ai_sentiment, float ai_confidence) {
         this.text_context = text_context;
         this.date = date;
         this.ai_sentiment = ai_sentiment;
+        this.ai_confidence = ai_confidence;
     }
 
     public String getText_context() {
@@ -33,11 +35,11 @@ public class JournalEntry {
         this.text_context = text_context;
     }
 
-    public Date getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(long date) {
         this.date = date;
     }
 
@@ -47,5 +49,13 @@ public class JournalEntry {
 
     public void setAi_sentiment(String ai_sentiment) {
         this.ai_sentiment = ai_sentiment;
+    }
+
+    public float getAi_confidence() {
+        return ai_confidence;
+    }
+
+    public void setAi_confidence(float ai_confidence) {
+        this.ai_confidence = ai_confidence;
     }
 }
