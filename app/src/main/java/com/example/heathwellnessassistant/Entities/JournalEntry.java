@@ -10,7 +10,7 @@ import java.sql.Date;
 public class JournalEntry {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private int journal_id;
 
     String text_context;
     Date date;
