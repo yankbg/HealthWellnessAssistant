@@ -15,7 +15,7 @@ import java.util.List;
 public interface JournalEntryDao {
 
     @Insert
-    public void inserttextanddate(String textContext, Date date);
+    public void inserttextanddate(JournalEntry journalEntry);
 
     @Insert
     public void insertallfield(String textContext, Date date, String ai_sentiment, float ai_confidence);
