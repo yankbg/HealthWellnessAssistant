@@ -12,15 +12,16 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.heathwellnessassistant.Entities.JournalEntry;
 
-import kotlin.jvm.Volatile;
 
-@Database(entities = {JournalEntry.class}, version = 1)
+
+
+@Database(entities = {JournalEntry.class}, version = 1, exportSchema = false)
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract JournalEntryDao journalEntryDao();
 
-    @Volatile
+
     private static  volatile AppDatabase INSTANCE; // Use volatile for thread safety
     private static final Object LOCK = new Object(); // Lock object for synchronization
 

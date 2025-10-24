@@ -1,12 +1,21 @@
 package com.example.heathwellnessassistant;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import com.example.heathwellnessassistant.Database.Converter;
+import android.content.Context;
 
-import java.sql.Date;
+import androidx.room.Room;
+
+import com.example.heathwellnessassistant.Database.AppDatabase;
+import com.example.heathwellnessassistant.Database.Converter;
+import com.example.heathwellnessassistant.Database.JournalEntryDao;
+import com.example.heathwellnessassistant.Entities.JournalEntry;
+
+import java.util.Date;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
