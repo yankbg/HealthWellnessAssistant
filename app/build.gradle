@@ -24,6 +24,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    aaptOptions {
+        noCompress 'tflite'
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -63,5 +66,9 @@ dependencies {
     //hilt DI
     implementation "com.google.dagger:hilt-android:2.42"
     ksp "com.google.dagger:hilt-compiler:2.42"
+    //tensorflow lite
+    implementation 'org.tensorflow:tensorflow-lite:2.9.0'
+    implementation 'org.tensorflow:tensorflow-lite-support:2.9.0' // For helper classes
+    implementation 'org.tensorflow:tensorflow-lite-task-text:2.9.0'
 
 }
