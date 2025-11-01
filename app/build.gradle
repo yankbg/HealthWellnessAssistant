@@ -46,7 +46,8 @@ dependencies {
 
     implementation "androidx.room:room-runtime:$room_version"
     // Use the KSP annotation processor
-    ksp "androidx.room:room-compiler:$room_version"
+//    ksp "androidx.room:room-compiler:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
     androidTestImplementation "androidx.room:room-testing:$room_version"
 
     // Optional: Kotlin Extensions and Coroutines support (recommended)
