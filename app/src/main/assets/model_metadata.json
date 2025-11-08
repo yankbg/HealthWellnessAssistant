@@ -1,0 +1,14 @@
+{
+  "labels": {
+    "0": "sadness",
+    "1": "joy",
+    "2": "love",
+    "3": "anger",
+    "4": "fear",
+    "5": "surprise"
+  },
+  "max_tokens": 10000,
+  "max_sequence_length": 100,
+  "version": "1.0",
+  "accuracy": 0.9054999947547913
+}
