@@ -1,20 +1,13 @@
 package com.example.heathwellnessassistant.Repository;
 
-import android.app.Application;
-import android.os.AsyncTask;
-
 import androidx.lifecycle.LiveData;
 
 import com.example.heathwellnessassistant.DataLayer.MyResult;
 import com.example.heathwellnessassistant.DataLayer.TfLiteSentimentAnalyzer;
-import com.example.heathwellnessassistant.Database.AppDatabase;
 import com.example.heathwellnessassistant.Database.JournalEntryDao;
 import com.example.heathwellnessassistant.Entities.JournalEntry;
 
-import java.lang.reflect.Executable;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -29,9 +22,9 @@ public class JournalEntryRepository {
     private final Executor executor;
 
 
-    public JournalEntryRepository(Application application, TfLiteSentimentAnalyzer sentimentAnalyzer) {
-        AppDatabase db = AppDatabase.getInstance(application);
-        journalEntryDao = db.journalEntryDao();
+    public JournalEntryRepository(JournalEntryDao journalEntryDao, TfLiteSentimentAnalyzer sentimentAnalyzer) {
+//        AppDatabase db = AppDatabase.getInstance(application);
+        this.journalEntryDao = journalEntryDao;
         journalEntryLiveData = journalEntryDao.getAllJournalEntry();
         this.sentimentAnalyzer = sentimentAnalyzer;
         this.executor = Executors.newSingleThreadExecutor();
