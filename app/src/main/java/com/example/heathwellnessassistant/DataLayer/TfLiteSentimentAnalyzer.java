@@ -2,26 +2,30 @@ package com.example.heathwellnessassistant.DataLayer;
 
 import android.content.Context;
 
-import org.tensorflow.lite.Interpreter;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.tensorflow.lite.task.text.nlclassifier.NLClassifier;
+
+
+
 
 public class TfLiteSentimentAnalyzer {
-    private static final String modelFile = "emotion_model.tflite";
-    private Interpreter interpreter;
-    private final Map<Integer, String> labels;
+    private static final String MODEL_FILE = "emotion_model.tflite";
+    private final NLClassifier classifier;
 
-//    public TfLiteSentimentAnalyzer() {
-//    }
 
     public TfLiteSentimentAnalyzer(Context context) {
-        labels = new HashMap<>();
-        labels.put(0, "sadness");
-        labels.put(1, "joy");
-        labels.put(2, "love");
-        labels.put(3, "anger");
-        labels.put(4, "fear");
-        labels.put(5, "surprise");
+        try{
+            NLClassifier.NLClassifierOptions options =
+                    NLClassifier.NLClassifierOptions.builder()
+                            .build();
+
+            classifier = NLClassifier.createFromFileAndOptions(
+                    context.getApplicationContext(),
+                    MODEL_FILE,
+                    options
+            );
+        }catch (Exception e){
+            throw new IllegalStateException("Failed to load sentiment model", e);
+        }
     }
 }

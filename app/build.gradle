@@ -68,7 +68,8 @@ dependencies {
     ksp "com.google.dagger:hilt-compiler:2.42"
     //tensorflow lite
     implementation 'org.tensorflow:tensorflow-lite:2.9.0'
-    implementation 'org.tensorflow:tensorflow-lite-support:2.9.0' // For helper classes
-    implementation 'org.tensorflow:tensorflow-lite-task-text:2.9.0'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.4.2' // For helper classes
+    implementation 'org.tensorflow:tensorflow-lite-task-text:0.4.2'
+    implementation 'org.tensorflow:tensorflow-lite-select-tf-ops:2.9.0'
 
 }
