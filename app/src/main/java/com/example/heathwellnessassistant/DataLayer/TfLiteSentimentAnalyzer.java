@@ -31,16 +31,16 @@ public class TfLiteSentimentAnalyzer {
             throw new IllegalStateException("Failed to load sentiment model", e);
         }
     }
-    public String analyzeText(String text){
+    public MyResult analyzeText(String text){
         if (text == null || text.trim().isEmpty()){
-            return "Empty input text";
+            return new MyResult(0,"Empty input text");
         }
         try{
             // 1. Run inference: get all categories (emotions)
             List<Category> results = classifier.classify(text);
 
             if(results == null || results.isEmpty()){
-                return "Unknown";
+                return new MyResult(1, "Unknown");
             }
             // 2. Take the top‑scoring class (ArgMax)
             Category top = results.get(0);
@@ -48,17 +48,18 @@ public class TfLiteSentimentAnalyzer {
             float confidence = top.getScore();
 
             // 3. Format: "joy with 85.0% confidence"
-            return String.format(
-                    "%s with %.1f%% confidence",
-                    label,
-                    confidence * 100
-            );
+//            return String.format(
+//                    "%s with %.1f%% confidence",
+//                    label,
+//                    confidence * 100
+//            );
+            return new MyResult(confidence,label);
 
         }catch (Exception e){
             e.printStackTrace();
             Log.d(TAG, "analyzeText: "+e);
 
-            return "error";
+            return new MyResult(2, "Error");
         }
     }
 }
