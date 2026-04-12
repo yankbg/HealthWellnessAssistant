@@ -23,13 +23,13 @@ public interface JournalEntryDao {
     @Update
     public void update(JournalEntry journalEntry);
 
-    @Query("SELECT * FROM JournalEntry ORDER BY date ASC")
+    @Query("SELECT * FROM JournalEntry ORDER BY date DESC")
     public List<JournalEntry> getJournalEntry();
 
-    @Query("SELECT * FROM JournalEntry WHERE journal_id = :id ORDER BY date ASC")
+    @Query("SELECT * FROM JournalEntry WHERE journal_id = :id ORDER BY date DESC")
     public JournalEntry getResult(long id);
 
-    @Query("SELECT * from JournalEntry ORDER BY date ASC")
+    @Query("SELECT * from JournalEntry ORDER BY date DESC")
     LiveData<List<JournalEntry>> getAllJournalEntry();
 
     @Delete

@@ -1,5 +1,7 @@
 package com.example.heathwellnessassistant.Repository;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 
 import com.example.heathwellnessassistant.DataLayer.MyResult;
@@ -34,6 +36,10 @@ public class JournalEntryRepository {
             return;
         }
         executor.execute(() ->{
+            if (sentimentAnalyzer == null) {
+                Log.w("AI_ERROR", "analyzeAndSaveEntry skipped: AI model not loaded");
+                return;
+            }
             // Run AI on background thread
             MyResult aiResult = sentimentAnalyzer.analyzeText(text);
 

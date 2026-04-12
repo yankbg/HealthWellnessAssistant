@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">heathWellnessAssistant</string>
+
+    <string name="journal_text">Journal text placeholder</string>
+    <string name="sentiment">Sentiment</string>
+    <string name="confidence">Confidence</string>
+    <string name="date_label">Date</string>
+    <string name="hint_journal_entry">Write your journal entry here...</string>
+
+    <string name="action_save">Save</string>
+
+    <string name="error_empty_journal">Please write something in your journal</string>
+
+    <string name="title_journal_history">Journal History</string>
 </resources>

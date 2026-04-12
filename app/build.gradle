@@ -17,6 +17,9 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    buildFeatures {
+        viewBinding true
+    }
 
     buildTypes {
         release {
@@ -67,9 +70,9 @@ dependencies {
     implementation "com.google.dagger:hilt-android:2.42"
     ksp "com.google.dagger:hilt-compiler:2.42"
     //tensorflow lite
-    implementation 'org.tensorflow:tensorflow-lite:2.9.0'
-    implementation 'org.tensorflow:tensorflow-lite-support:0.4.2' // For helper classes
-    implementation 'org.tensorflow:tensorflow-lite-task-text:0.4.2'
-    implementation 'org.tensorflow:tensorflow-lite-select-tf-ops:2.9.0'
+    implementation 'org.tensorflow:tensorflow-lite:2.14.0'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.4.4' // For helper classes
+    implementation 'org.tensorflow:tensorflow-lite-task-text:0.4.4'
+    implementation 'org.tensorflow:tensorflow-lite-select-tf-ops:2.14.0'
 
 }

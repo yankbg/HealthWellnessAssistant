@@ -2,50 +2,87 @@ package com.example.heathwellnessassistant;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.heathwellnessassistant.Adapters.JournalEntryAdapter;
+import com.example.heathwellnessassistant.DataLayer.TfLiteSentimentAnalyzer;
+import com.example.heathwellnessassistant.Database.AppDatabase;
+import com.example.heathwellnessassistant.Database.JournalEntryDao;
 import com.example.heathwellnessassistant.Entities.JournalEntry;
+import com.example.heathwellnessassistant.Repository.JournalEntryRepository;
 import com.example.heathwellnessassistant.ViewModel.JournalViewModel;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-    EditText inputField;
-    TextView outputFiled;
-    Button addBtn;
-    JournalViewModel journalViewModel;
+
+    private JournalViewModel viewModel;
+    private RecyclerView recyclerView;
+    private JournalEntryAdapter adapter;
+    TfLiteSentimentAnalyzer analyzer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        inputField = findViewById(R.id.etText_context);
-        outputFiled = findViewById(R.id.tv01);
-        addBtn = findViewById(R.id.button);
+        // 1. Build dependencies
+        AppDatabase db = AppDatabase.getInstance(this.getApplication());
+        JournalEntryDao dao = db.journalEntryDao();
+        try {
+            analyzer = new TfLiteSentimentAnalyzer(this);
+            JournalEntryRepository repository = new JournalEntryRepository(dao, analyzer);
 
-        journalViewModel = new ViewModelProvider(this).get(JournalViewModel.class);
+            //Create ViewModel with Factory
+            JournalEntryViewModelFactory factory = new JournalEntryViewModelFactory(repository);
+            this.viewModel = new ViewModelProvider(this, factory).get(JournalViewModel.class);
 
-        addBtn.setOnClickListener(v -> {
-            String entryText = inputField.getText().toString();
-            if(!entryText.isEmpty()){
-                JournalEntry newEntry = new JournalEntry();
-                newEntry.setText_context(entryText);
-                newEntry.setDate(new Date());
-                journalViewModel.insetJournalEntry(newEntry);
-                inputField.setText("");
-            }
-        });
+            //Observe data
+            this.viewModel.getJournalEntryAll().observe(this, entries ->{
+                adapter.submitList(entries);
+            });
 
-        journalViewModel.getJournalEntryAll().observe(this, entries ->{
-            StringBuilder allEntries = new StringBuilder();
-            for(JournalEntry entry: entries){
-                allEntries.append(entry.getText_context()).append("");
-            }
-            outputFiled.setText(allEntries.toString());
-        });
+            //setup RecyclerView
+            this.adapter = new JournalEntryAdapter();
+            this.recyclerView = findViewById(R.id.recyclerView);
+            this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            this.recyclerView.setAdapter(adapter);
+
+            // Save button (FloatingActionButton)
+            findViewById(R.id.fabSave).setOnClickListener(v -> onSaveClicked());
+        } catch (Exception e) {
+            Log.e("AI_ERROR", "Failed to load AI model: " + e.getMessage());
+            // Show a Toast so you know it failed without crashing
+            Toast.makeText(this, "AI Analysis currently unavailable", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+
+    public void onSaveClicked() {
+        TextInputLayout layout = findViewById(R.id.textInputLayout);
+        TextInputEditText et = findViewById(R.id.etJournalText);
+
+        String text = et.getText().toString().trim();
+        if (TextUtils.isEmpty(text)) {
+            layout.setError("Journal text is required");
+            return;
+        }
+
+        layout.setErrorEnabled(false);
+        et.setText("");
+
+        viewModel.saveEntry(text);
     }
 }
