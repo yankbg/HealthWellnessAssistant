@@ -50,7 +50,11 @@ public class MainActivity extends AppCompatActivity {
 
             //Observe data
             this.viewModel.getJournalEntryAll().observe(this, entries ->{
-                adapter.submitList(entries);
+                adapter.submitList(entries, () -> {
+                    if (entries != null && !entries.isEmpty()) {
+                        recyclerView.scrollToPosition(0);
+                    }
+                });
             });
 
             //setup RecyclerView

@@ -4,7 +4,7 @@ public class MyResult {
     float value;
     String message;
 
-    MyResult(float value, String message) {
+    MyResult( String message,float value) {
         this.value = value;
         this.message = message;
     }
