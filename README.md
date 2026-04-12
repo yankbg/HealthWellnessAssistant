@@ -128,8 +128,7 @@ An Android application that uses a Deep Learning LSTM model to analyze emotional
 ## 📸 Screenshots 
 
 
-![Home / Journal Input Screen  ](app/src/main/assets/heathWellnessAssistant.jpg.jpeg)
-<img src="screenshots/heathWellnessAssistant.jpg" width="300"/>
+<img src="app/src/main/assets/heathWellnessAssistant.jpg.jpeg" width="300"/>
 
 ---
 
