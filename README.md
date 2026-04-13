@@ -99,7 +99,7 @@ An Android application that uses a Deep Learning LSTM model to analyze emotional
 
 1. **Clone the Repository**  
    ```bash
-   git clone https://github.com/<your-username>/HeathWellnessAssistant.git
+   git clone https://github.com/yankbg/HeathWellnessAssistant.git
    cd HeathWellnessAssistant
    ```
 
@@ -156,6 +156,16 @@ Since the **journaling path is 100% complete and verified**, here are the planne
    - **Model Optimization**: Explore smaller transformer models  
    - **Multi‑language**: Spanish/Arabic support for global audiences  
    - **Backup**: Google Drive sync for journal data
+
+---
+
+## ⚠️ Model Limitations
+
+- **Overall accuracy**: ~56.7% on real-world conversational sentences.
+- **Love vs Joy confusion**: The model frequently misclassifies `love` sentences as `joy` due to class imbalance in the Kaggle training dataset — love samples are significantly underrepresented compared to joy.
+- **Surprise confidence**: `surprise` predictions tend to carry low confidence scores (22–50%) and can overlap with `joy` for positive unexpected events.
+- **Anger vs Sadness overlap**: Passive anger phrases (e.g. *"I feel disrespected"*, *"taken for granted"*) are sometimes predicted as `sadness`.
+- **Mitigation**: The app displays the **top 2 predicted emotions with confidence scores** so users get a more honest and nuanced reading rather than a single potentially incorrect label.
 
 ---
 
