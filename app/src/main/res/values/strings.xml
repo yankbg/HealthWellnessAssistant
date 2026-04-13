@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">heathWellnessAssistant</string>
+    <string name="app_name">Wellness Journal</string>
 
     <string name="journal_text">Journal text placeholder</string>
     <string name="sentiment">Sentiment</string>
@@ -12,4 +12,5 @@
     <string name="error_empty_journal">Please write something in your journal</string>
 
     <string name="title_journal_history">Journal History</string>
+    <string name="splash_tagline">Track your mood. Understand yourself.</string>
 </resources>
