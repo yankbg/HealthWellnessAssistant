@@ -31,6 +31,9 @@ public class JournalEntryRepository {
         this.sentimentAnalyzer = sentimentAnalyzer;
         this.executor = Executors.newSingleThreadExecutor();
     }
+    public void updateIsCorrect(long id, boolean isCorrect){
+        journalEntryDao.updateIsCorrect(id, isCorrect);
+    }
     public void analyzeAndSaveEntry(String text){
         if(text == null || text.trim().isEmpty()){
             return;

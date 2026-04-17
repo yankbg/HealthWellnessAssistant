@@ -8,6 +8,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.heathwellnessassistant.Entities.JournalEntry;
@@ -15,7 +16,7 @@ import com.example.heathwellnessassistant.Entities.JournalEntry;
 
 
 
-@Database(entities = {JournalEntry.class}, version = 1, exportSchema = false)
+@Database(entities = {JournalEntry.class}, version = 2, exportSchema = false)
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -25,12 +26,19 @@ public abstract class AppDatabase extends RoomDatabase {
     private static  volatile AppDatabase INSTANCE; // Use volatile for thread safety
     private static final Object LOCK = new Object(); // Lock object for synchronization
 
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE JournalEntry ADD COLUMN isCorrect INTEGER NOT NULL DEFAULT 0");
+        }
+    };
     public static AppDatabase getInstance(Context context){
         if (INSTANCE == null) {
             synchronized (LOCK) { // Synchronize to prevent multiple threads from creating instances
                 if (INSTANCE == null) { // Double-check locking
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "HeathWellnessDb")
+                            .addMigrations(MIGRATION_1_2)
                             .build();
                 }
             }

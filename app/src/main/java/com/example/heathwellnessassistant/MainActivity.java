@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.heathwellnessassistant.Adapters.JournalEntryAdapter;
+import com.example.heathwellnessassistant.DataLayer.OnJournalFeedbackListener;
 import com.example.heathwellnessassistant.DataLayer.TfLiteSentimentAnalyzer;
 import com.example.heathwellnessassistant.Database.AppDatabase;
 import com.example.heathwellnessassistant.Database.JournalEntryDao;
@@ -62,7 +63,17 @@ public class MainActivity extends AppCompatActivity {
             });
 
             //setup RecyclerView
-            this.adapter = new JournalEntryAdapter();
+            this. adapter = new JournalEntryAdapter(new OnJournalFeedbackListener() {
+                @Override
+                public void onCorrectClick(JournalEntry entry) {
+                    viewModel.markCorrect(entry.getJournal_id());
+                }
+
+                @Override
+                public void onWrongClick(JournalEntry entry) {
+                    viewModel.markWrong(entry.getJournal_id());
+                }
+            });
             this.recyclerView = findViewById(R.id.recyclerView);
             this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
             this.recyclerView.setAdapter(adapter);

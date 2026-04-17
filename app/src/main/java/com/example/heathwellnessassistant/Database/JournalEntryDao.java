@@ -34,4 +34,6 @@ public interface JournalEntryDao {
 
     @Delete
     public void deleteJournalEntry(JournalEntry journalEntry);
+    @Query("UPDATE JournalEntry SET isCorrect = :isCorrect WHERE journal_id = :id")
+    void updateIsCorrect(long id, boolean isCorrect);
 }
