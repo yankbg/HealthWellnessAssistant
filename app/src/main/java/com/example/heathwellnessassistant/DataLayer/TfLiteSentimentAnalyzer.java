@@ -12,8 +12,11 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -84,31 +87,79 @@ public class TfLiteSentimentAnalyzer {
             Log.e(TAG, "Interpreter is null");
             return new MyResult("sadness", 0.0f);
         }
-        try {
-            // Input: int[1][100]
-            int[][] input = new int[1][MAX_SEQ_LEN];
-            int[] tokens = tokenize(text);
-            System.arraycopy(tokens, 0, input[0], 0, MAX_SEQ_LEN);
 
-            // Output: float[1][6]
-            float[][] output = new float[1][6];
 
-            interpreter.run(input, output);
-
-            int maxIdx = 0;
-            float maxProb = -1f;
-            for (int i = 0; i < output[0].length; i++) {
-                if (output[0][i] > maxProb) {
-                    maxProb = output[0][i];
-                    maxIdx = i;
+            // Split into sentences
+            String[] sentences = text.split("[.!?]+");
+            List<String> validSentences = new ArrayList<>();
+            for(String s : sentences){
+                String trimmed = s.trim();
+                if(trimmed.split("\\s+").length >= 4){ // min 4 words per sentence
+                    validSentences.add(trimmed);
                 }
             }
-            Log.d(TAG, "Result: " + labels[maxIdx] + " @ " + (maxProb * 100) + "%");
-            return new MyResult(labels[maxIdx], maxProb);
 
-        } catch (Exception e) {
-            Log.e(TAG, "Inference failed", e);
-            return new MyResult("sadness", 0.0f);
+            // Fallback to full text if no valid sentences
+            if(validSentences.isEmpty()){
+                validSentences.add(text.trim());
+            }
+
+            // Confidence-weighted voting across all sentences
+            float[] weightedScores = new float[6];
+            float totalWeight = 0f;
+
+            for(String sentence : validSentences){
+                float[] scores = runInference(sentence);
+                if(scores == null) continue;
+                float topConf = 0f;
+                for(float s : scores) if(s > topConf) topConf = s;
+                for (int i = 0; i < 6; i++) weightedScores[i] += scores[i] * topConf;
+                totalWeight += topConf;
+            }
+
+            //Normalize
+            if(totalWeight > 0) {
+                for(int i=0; i < 6; i++)  weightedScores[i] /= totalWeight;
+            }
+
+            //Find top 2
+            int firstIdx = 0, secondIdx = -1;
+            float firstMax = weightedScores[0], secondMax = -1f;
+            for(int i = 1; i < 6; i++){
+                if(weightedScores[i] > firstMax) {
+                    secondMax = firstMax; secondIdx = firstIdx;
+                    firstMax = weightedScores[i]; firstIdx = i;
+                }else if(weightedScores[i] > secondMax){
+                    secondMax = weightedScores[i]; secondIdx = i;
+                }
+            }
+
+            String finalDisplay = (secondIdx != -1 && secondMax > 0.20f)
+                    ? labels[firstIdx] + " & " + labels[secondIdx]
+                    : labels[firstIdx];
+
+            Log.d(TAG, "Result: " + finalDisplay + " (" + (firstMax * 100) + "%)");
+            return new MyResult(finalDisplay, firstMax);
+
+    }
+
+    // Extracted inference logic — reused per sentence
+    private float[]runInference(String sentence){
+        try{
+            String [] words = sentence.trim().split("\\s+");
+            if(words.length > 100){
+                sentence = String.join(" ", Arrays.copyOfRange(words, 0, 100));
+            }
+            int[][] input = new int[1][MAX_SEQ_LEN];
+            int[] tokens = tokenize(sentence);
+            System.arraycopy(tokens, 0, input[0], 0, MAX_SEQ_LEN);
+            float[][] output = new float[1][6];
+            interpreter.run(input, output);
+            return output[0];
+
+        }catch (Exception e){
+            Log.e(TAG, "runInference: "+ e.getMessage());
+            return null;
         }
     }
 
