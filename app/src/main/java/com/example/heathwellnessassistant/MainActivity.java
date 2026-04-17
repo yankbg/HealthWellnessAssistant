@@ -22,6 +22,7 @@ import com.example.heathwellnessassistant.Database.JournalEntryDao;
 import com.example.heathwellnessassistant.Entities.JournalEntry;
 import com.example.heathwellnessassistant.Repository.JournalEntryRepository;
 import com.example.heathwellnessassistant.ViewModel.JournalViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onWrongClick(JournalEntry entry) {
-                    viewModel.markWrong(entry.getJournal_id());
+                    showCorrectionSheet(entry);
                 }
             });
             this.recyclerView = findViewById(R.id.recyclerView);
@@ -103,5 +104,25 @@ public class MainActivity extends AppCompatActivity {
         et.setText("");
 
         viewModel.saveEntry(text);
+    }
+    private void showCorrectionSheet(JournalEntry entry) {
+        String[] emotions = {"sadness", "joy", "love", "anger", "fear", "surprise"};
+
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("What was the correct emotion?")
+                .setItems(emotions, (dialog, which) -> {
+                    // Save correction silently in background
+                    entry.setCorrect(false);
+                    entry.correctedEmotion = emotions[which];
+                    viewModel.markWrong(entry.getJournal_id());
+                    viewModel.updateCorrectedEmotion(entry.getJournal_id(), entry.getCorrectedEmotion());
+                    Toast.makeText(this, "the corrected emotion is "+ emotions[which], Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Skip", (dialog, which) -> {
+                    // Still mark as wrong even if they skip
+                    entry.setCorrect(false);
+                    viewModel.markWrong(entry.getJournal_id());
+                })
+                .show();
     }
 }

@@ -36,4 +36,6 @@ public interface JournalEntryDao {
     public void deleteJournalEntry(JournalEntry journalEntry);
     @Query("UPDATE JournalEntry SET isCorrect = :isCorrect WHERE journal_id = :id")
     void updateIsCorrect(long id, boolean isCorrect);
+    @Query("UPDATE JournalEntry SET correctedEmotion = :correctedEmotion WHERE journal_id = :id")
+    void updatecorrectedEmotion(long id, String correctedEmotion);
 }

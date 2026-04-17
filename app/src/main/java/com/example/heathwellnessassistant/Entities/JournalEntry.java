@@ -1,5 +1,7 @@
 package com.example.heathwellnessassistant.Entities;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -19,6 +21,9 @@ public class JournalEntry {
     private String ai_sentiment;
     private float ai_confidence;
     private boolean isCorrect;
+    @ColumnInfo(name = "correctedEmotion", defaultValue = "")
+    @NonNull
+    public String correctedEmotion = "";
 
     public JournalEntry() {
     }
@@ -86,6 +91,14 @@ public class JournalEntry {
 
     public void setCorrect(boolean correct) {
         isCorrect = correct;
+    }
+
+    public String getCorrectedEmotion() {
+        return correctedEmotion;
+    }
+
+    public void setCorrectedEmotion(String correctedEmotion) {
+        this.correctedEmotion = correctedEmotion;
     }
     //equals and hashcode method for Junit testing
 

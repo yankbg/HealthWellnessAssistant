@@ -34,6 +34,9 @@ public class JournalEntryRepository {
     public void updateIsCorrect(long id, boolean isCorrect){
         journalEntryDao.updateIsCorrect(id, isCorrect);
     }
+    public void updateCorrectedEmotion(long id, String correctedEmotion){
+        journalEntryDao.updatecorrectedEmotion(id, correctedEmotion);
+    }
     public void analyzeAndSaveEntry(String text){
         if(text == null || text.trim().isEmpty()){
             return;

@@ -42,4 +42,8 @@ public class JournalViewModel extends ViewModel {
     public void markWrong(long id){
         executorService.execute(() -> repository.updateIsCorrect(id, false));
     }
+    public void updateCorrectedEmotion(long id, String correctedEmotion){
+        executorService.execute(() -> repository.updateCorrectedEmotion(id, correctedEmotion));
+    }
+
 }

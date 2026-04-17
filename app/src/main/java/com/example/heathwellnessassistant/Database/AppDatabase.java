@@ -16,7 +16,7 @@ import com.example.heathwellnessassistant.Entities.JournalEntry;
 
 
 
-@Database(entities = {JournalEntry.class}, version = 2, exportSchema = false)
+@Database(entities = {JournalEntry.class}, version = 3, exportSchema = false)
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -32,6 +32,13 @@ public abstract class AppDatabase extends RoomDatabase {
             database.execSQL("ALTER TABLE JournalEntry ADD COLUMN isCorrect INTEGER NOT NULL DEFAULT 0");
         }
     };
+
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE JournalEntry ADD COLUMN correctedEmotion TEXT NOT NULL DEFAULT ''");
+        }
+    };
     public static AppDatabase getInstance(Context context){
         if (INSTANCE == null) {
             synchronized (LOCK) { // Synchronize to prevent multiple threads from creating instances
@@ -39,6 +46,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "HeathWellnessDb")
                             .addMigrations(MIGRATION_1_2)
+                            .addMigrations(MIGRATION_2_3)
                             .build();
                 }
             }
