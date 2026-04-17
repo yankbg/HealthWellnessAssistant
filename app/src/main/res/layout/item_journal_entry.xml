@@ -48,7 +48,29 @@
             android:textSize="12sp"
             android:textColor="?android:textColorSecondary"
             android:layout_marginTop="4dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:gravity="end">
 
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCorrect"
+                style="@style/CorrectButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Correct" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnWrong"
+                style="@style/WrongButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="Wrong" />
+        </LinearLayout>
+
+        </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

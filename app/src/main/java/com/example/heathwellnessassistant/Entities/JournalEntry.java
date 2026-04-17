@@ -18,6 +18,7 @@ public class JournalEntry {
     private Date date;
     private String ai_sentiment;
     private float ai_confidence;
+    private boolean isCorrect;
 
     public JournalEntry() {
     }
@@ -27,6 +28,7 @@ public class JournalEntry {
         this.date = date;
         this.ai_sentiment = ai_sentiment;
         this.ai_confidence = ai_confidence;
+        this.isCorrect = false;
     }
 
     public JournalEntry(long journal_id, String text_context, Date date, String ai_sentiment, float ai_confidence) {
@@ -35,6 +37,7 @@ public class JournalEntry {
         this.date = date;
         this.ai_sentiment = ai_sentiment;
         this.ai_confidence = ai_confidence;
+        this.isCorrect = false;
     }
 
     public String getText_context() {
@@ -77,6 +80,13 @@ public class JournalEntry {
         this.journal_id = journal_id;
     }
 
+    public boolean isCorrect() {
+        return isCorrect;
+    }
+
+    public void setCorrect(boolean correct) {
+        isCorrect = correct;
+    }
     //equals and hashcode method for Junit testing
 
     @Override
